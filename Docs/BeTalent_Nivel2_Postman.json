@@ -1,0 +1,375 @@
+{
+  "info": {
+    "name": "BeTalent API - Nível 2",
+    "description": "Collection automatizada para testar a API de Pagamentos com Fallback do Desafio BeMobile (Nível 2). O Script de Login capta o token e abastece as rotas dinamicamente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Autenticação",
+      "item": [
+        {
+          "name": "Signup (Criar Admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Administrador Sistema\",\n  \"email\": \"admin@betalent.com\",\n  \"password\": \"senha_segura_123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login (Gerar Token ScriptAutomático)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token && jsonData.token.token) {",
+                  "    pm.collectionVariables.set(\"authToken\", jsonData.token.token);",
+                  "    console.log(\"Token Salvo Automaticamente!\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@betalent.com\",\n  \"password\": \"senha_segura_123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Checkout (Público)",
+      "item": [
+        {
+          "name": "Realizar Compra",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2,\n  \"client_name\": \"Senhor Testador\",\n  \"client_email\": \"teste@provedor.com\",\n  \"card_number\": \"1234567812345678\",\n  \"cvv\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/checkout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "checkout"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Transações & Reembolsos",
+      "item": [
+        {
+          "name": "Listar Todas Transações",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reembolsar Transação",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/transactions/1/refund",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "1",
+                "refund"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Produtos",
+      "item": [
+        {
+          "name": "Criar Produto",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Notebook Gamer\",\n  \"value\": 500000,\n  \"amount\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Produtos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Gateways",
+      "item": [
+        {
+          "name": "Listar Gateways",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gateways",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gateways"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ativar/Desativar Gateway",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gateways/1/toggle_active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gateways",
+                "1",
+                "toggle_active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Alterar Prioridade",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priority\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/gateways/1/priority",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "gateways",
+                "1",
+                "priority"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Clientes",
+      "item": [
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clients"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3333/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

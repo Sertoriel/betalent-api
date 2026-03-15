@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: betalent
+    ports:
+      - '3306:3306'
+
+  gateways-mock:
+    image: matheusprotzen/gateways-mock
+    ports:
+      - '3001:3001'
+      - '3002:3002'
