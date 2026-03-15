@@ -31,7 +31,7 @@ Para emular este projeto em sua máquina e atestar a qualidade de sua codificaç
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/SeuUsuario/betalent-api.git
+git clone https://github.com/Sertoriel/betalent-api.git
 cd betalent-api
 ```
 
