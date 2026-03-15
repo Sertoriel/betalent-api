@@ -97,10 +97,10 @@ Toda validação real feita sob APIs transacionais e pagamentos com Mock merece 
 
 Dentro da pasta **`/Docs`**, você encontrará dois artefatos espetaculares deixados para você:
 
-1. **📄 `Docs/README.md`**: Um mini-artigo/tutorial onde explico minuciosamente como a base de dados do Nível 2 suporta as decisões, como testar o sistema de prioridade offline na unha, e como o Postman te mostrará o Gateway vencedor da transação. [Docs](../Docs/README.md)
+1. **📄 `Docs/README.md`**: Um mini-artigo/tutorial onde explico minuciosamente como a base de dados do Nível 2 suporta as decisões, como testar o sistema de prioridade offline na unha, e como o Postman te mostrará o Gateway vencedor da transação. [Docs](./Docs/README.md)
    
 2. **🔌 `Docs/BeTalent_Nivel2_Postman.json`**: Nossa formatação especial da collection do desafio. Importe isso no seu Postman! 
-   * **Spoiler:** Criei scripts nela para interceptar seus retornos de Login e embutir o Token Global em todas as rotas privadas sem que você gaste tempo com Control+C/Control+V! [Postman](../Docs/BeTalent_Nivel2_Postman.json)
+   * **Spoiler:** Criei scripts nela para interceptar seus retornos de Login e embutir o Token Global em todas as rotas privadas sem que você gaste tempo com Control+C/Control+V! [Postman](./Docs/BeTalent_Nivel2_Postman.json)
 
 ---
 
