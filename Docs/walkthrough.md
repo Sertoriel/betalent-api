@@ -12,9 +12,9 @@ Aqui estão as entidades principais consolidadas pelo AdonisJS/Lucid ORM no noss
 
 ### Tabelas Centrais
 * **`users`**: Administradores que podem consultar transações e fazer reembolsos.
-    * Campos: `id`, `full_name`, [email](file:///c:/Users/Sertoriel/Documents/betalent-api/app/validators/user.ts#3-7), [password](file:///c:/Users/Sertoriel/Documents/betalent-api/app/validators/user.ts#7-8).
+    * Campos: `id`, `full_name`, [email](../app/validators/user.ts#L3-L7), [password](../app/validators/user.ts#L7-L8).
 * **`clients`**: Clientes finais gerados automaticamente quando fazem um checkout.
-    * Campos: `id`, `name`, [email](file:///c:/Users/Sertoriel/Documents/betalent-api/app/validators/user.ts#3-7).
+    * Campos: `id`, `name`, [email](../app/validators/user.ts#L3-L7).
 * **`products`**: Estoque de itens elegíveis para compra.
     * Campos: `id`, `name`, `value` (preço em *centavos*), `amount` (quantidade em estoque).
 * **`gateways`**: Os provedores de pagamento com controle dinâmico de failover.
@@ -36,9 +36,9 @@ A joia da nossa arquitetura. Em vez de espalhar dados financeiros, concentramos 
 
 ## 🏗️ 2. A Arquitetura Dinâmica (Fallback Multi-Gateway)
 
-Nossa API implementa o **Padrão de Falha Resiliente de Alta Disponibilidade (Fallback)** através da classe [PaymentManager](file:///C:/Users/Sertoriel/AppData/Roaming/Code/User/History/-3d9e671/4dDN.ts#6-31):
+Nossa API implementa o **Padrão de Falha Resiliente de Alta Disponibilidade (Fallback)** através da classe [PaymentManager](../app/services/gateways/payment_manager.ts#L6-L31):
 
-1. Quando a rota de `POST /checkout` é chamada (uma rota pública), ela aciona o [PaymentManager](file:///C:/Users/Sertoriel/AppData/Roaming/Code/User/History/-3d9e671/4dDN.ts#6-31).
+1. Quando a rota de `POST /checkout` é chamada (uma rota pública), ela aciona o [PaymentManager](../app/services/gateways/payment_manager.ts#L6-L31).
 2. O sistema verifica no BD `gateways` todos que estão com `is_active: true`, carregando-os do menor `priority` para o maior.
 3. Se o "Gateway 1" der Timeout ou explodir com Erro 500, o código **não propaga a exceção** para o cliente final. O loop intercepta, aciona um `logger.warn()` no CLI, invoca o "Gateway 2", compila sua assinatura e finaliza o pagamento sem estresse.
 4. Ao fazer o Reembolso (`POST /transactions/:id/refund`), usamos o `gateway_id` gravado na venda original para carregar a injeção do provedor exato, estornando na fonte real em vez de mandar às cegas para o Gateway de maior prioridade atual.
@@ -84,7 +84,7 @@ Se não rodou os seeds:
 #### Passo 4: O Teste de Alta Disponibilidade (Fallback)
 1. Abra a pasta `5. Gateways` -> `Ativar/Desativar Gateway` ou `Alterar Prioridade`.
 2. Envie a solicitação de desativar o Gateway 1 (`PATCH /gateways/1/toggle_active`).
-3. Volte na pasta do [Checkout](file:///c:/Users/Sertoriel/Documents/betalent-api/start/routes.ts#5-6) e dê `Send` na compra de novo.
+3. Volte na pasta do [Checkout](../start/routes.ts) e dê `Send` na compra de novo.
 4. Olhe a resposta. **DEU SUCESSO!** E se você olhar os logs do terminal da sua API, verá ela informando: `"Gateway 1 inativo... Tentando no Gateway 2... Gateway 2 aprovou o pagamento!"`.
 
 #### Passo 5: Reembolso Simples
